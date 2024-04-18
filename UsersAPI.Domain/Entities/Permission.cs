@@ -2,6 +2,7 @@
 {
     public class Permission
     {
+        public Guid Id { get; set; }
         public Guid RoleId { get; set; }
         public Guid SubModuleId { get; set; }
         public bool? Create { get; set; }
@@ -14,7 +15,7 @@
         /// <summary>
         /// Relacionamentos entre Entidades
         /// </summary>
-        public List<Role>? Roles { get; set; }
-        public List<SubModule>? SubModules { get; set; }
+        public Role? Role { get; set; }
+        public SubModule? SubModule { get; set; }
     }
 }

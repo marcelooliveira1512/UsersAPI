@@ -16,6 +16,9 @@ namespace UsersAPI.Domain.Services
 
         public void Add(SubModule subModule)
         {
+            if (GetByModuleId(subModule.ModuleId) == null)                
+                throw new ModuleIsNotExistsException(subModule.ModuleId);
+
             if (Get(subModule.SubModuleName) != null)
                 throw new SubModuleAlreadyExistsException(subModule.SubModuleName);
 
@@ -31,7 +34,7 @@ namespace UsersAPI.Domain.Services
 
         public void Delete(SubModule subModule)
         {
-            if (_unitOfWork?.PermissionRepository.GetBySubModuleId(subModule.Id) != null)
+            if (_unitOfWork?.SubModuleRepository.GetByPermission(subModule.Id) != null)
                 throw new SubModuleIsNotDeleteException(subModule.SubModuleName);
 
             _unitOfWork?.SubModuleRepository.Delete(subModule);
@@ -60,6 +63,11 @@ namespace UsersAPI.Domain.Services
         public SubModule? GetByModuleId(Guid moduleId)
         {
             return _unitOfWork?.SubModuleRepository.GetByModuleId(moduleId);
+        }
+
+        public SubModule? GetByPermission(Guid id)
+        {
+            return _unitOfWork?.SubModuleRepository.GetByModuleId(id);
         }
 
         public void Dispose()

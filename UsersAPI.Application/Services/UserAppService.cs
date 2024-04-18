@@ -41,43 +41,79 @@ namespace UsersAPI.Application.Services
                 _userDomainService?.Add(user);
                 return _mapper.Map<UserResponseDto>(user);
             }
-            catch(EmailAlreadyExistsException e)
+            catch (EmailAlreadyExistsException e)
             {
                 throw new ApplicationException(e.Message);
+            }
+            catch (CompanyIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (RoleIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
             }
         }
 
         public UserResponseDto Update(Guid id, UserUpdateRequestDto dto)
         {
-            var user = _userDomainService?.Get(id);
-            user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;
-            user.Active = dto.Active;
-            user.EmailConfirmed = dto.EmailConfirmed;
+            try
+            {
+                var user = _userDomainService?.Get(id);
+                user.CompanyId = dto.CompanyId;
+                user.RoleId = dto.RoleId;
+                user.FirstName = dto.FirstName;
+                user.LastName = dto.LastName;
+                user.Active = dto.Active;
+                user.EmailConfirmed = dto.EmailConfirmed;
 
-            _userDomainService?.Update(user);
+                _userDomainService?.Update(user);
 
-            return _mapper.Map<UserResponseDto>(user);
+                return _mapper.Map<UserResponseDto>(user);
+            }
+            catch (CompanyIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (RoleIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
+
         }
 
         public UserResponseDto Delete(Guid id)
         {
-            var user = _userDomainService?.Get(id);
-            _userDomainService?.Delete(user);
+            try
+            {
+                var user = _userDomainService?.Get(id);
+                
+                _userDomainService?.Delete(user);
 
-            return _mapper.Map<UserResponseDto>(user);
+                return _mapper.Map<UserResponseDto>(user);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
-        
+
         public List<UserResponseDto> GetAll()
-        {
-            
+        {            
             var users = _userDomainService?.GetAll().ToList();
             return _mapper.Map<List<UserResponseDto>>(users);
         }
 
         public List<UserResponseDto> GetAll(Guid companyId)
-        {
-            
+        {            
             var users = _userDomainService?.GetAll(companyId).ToList();
             return _mapper.Map<List<UserResponseDto>>(users);
         }
@@ -87,6 +123,20 @@ namespace UsersAPI.Application.Services
             var user = _userDomainService?.Get(id);
             return _mapper.Map<UserResponseDto>(user);
         }
+
+/*
+        public UserResponseDto? GetByCompanyId(Guid companyId)
+        {
+            var user = _userDomainService?.GetByCompanyId(companyId);
+            return _mapper.Map<UserResponseDto>(user);
+        }
+
+        public UserResponseDto? GetByRoleId(Guid roleId)
+        {
+            var user = _userDomainService?.GetByRoleId(roleId);
+            return _mapper.Map<UserResponseDto>(user);
+        }
+*/
 
         public void Dispose()
         {

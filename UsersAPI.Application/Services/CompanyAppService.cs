@@ -3,6 +3,7 @@ using UsersAPI.Application.Dtos.Requests;
 using UsersAPI.Application.Dtos.Responses;
 using UsersAPI.Application.Interfaces.Application;
 using UsersAPI.Domain.Entities;
+using UsersAPI.Domain.Exceptions;
 using UsersAPI.Domain.Interfaces.Services;
 
 namespace UsersAPI.Application.Services
@@ -53,21 +54,31 @@ namespace UsersAPI.Application.Services
                 return _mapper.Map<CompanyResponseDto>(company);
 
             }
+            catch (CnpjAlreadyExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (CnpjIsNotValidException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (CompanyIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
             catch (Exception e)
             {
-                throw new Exception(e.Message); 
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
             }
         }
 
         public CompanyResponseDto Update(Guid id, CompanyUpdateRequestDto dto)
         {
-            var company = _companyDomainService?.Get(id);
-                company.CompanyType = dto.CompanyType;
-                company.ParentCompanyId = dto.ParentCompanyId;
-                company.CompanyName = dto.CompanyName;
+            try
+            {
+                var company = _companyDomainService?.Get(id);
                 company.FantasyName = dto.FantasyName;
                 company.ImgLogo = dto.ImgLogo;
-                company.Cnpj = dto.Cnpj;
                 company.InscMunicipal = dto.InscMunicipal;
                 company.InscEstadual = dto.InscEstadual;
                 company.Cnae = dto.Cnae;
@@ -84,18 +95,35 @@ namespace UsersAPI.Application.Services
                 company.City = dto.City;
                 company.State = dto.State;
 
-            _companyDomainService?.Update(company);
+                _companyDomainService?.Update(company);
 
-            return _mapper.Map<CompanyResponseDto>(company);
+                return _mapper.Map<CompanyResponseDto>(company);
+            }
+            catch (CompanyIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
+
         }
 
         public CompanyResponseDto Delete(Guid id)
         {
-            var company = _companyDomainService?.Get(id);
-                         
-            _companyDomainService?.Delete(company);
+            try
+            {
+                var company = _companyDomainService?.Get(id);
 
-            return _mapper.Map<CompanyResponseDto>(company);
+                _companyDomainService?.Delete(company);
+
+                return _mapper.Map<CompanyResponseDto>(company);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public List<CompanyResponseDto> GetAll()

@@ -16,17 +16,17 @@ namespace UsersAPI.Infra.Data.Repositories
 
         public List<Permission> GetAll()
         {
-            return _dataContext.Permission.Include(r => r.Roles).Include(s => s.SubModules).ToList();
+            return _dataContext.Permission.Include(r => r.Role).Include(s => s.SubModule).ToList();
         }
 
         public Permission? Get(Guid subModuleId, Guid roleId)
         {
-            return _dataContext?.Permission.Include(r => r.Roles).Include(s => s.SubModules).Where(p => p.SubModuleId == subModuleId && p.RoleId == roleId).FirstOrDefault();
+            return _dataContext?.Permission.Where(p => p.SubModuleId == subModuleId && p.RoleId == roleId).FirstOrDefault();
         }
 
-        public Permission? GetBySubModuleId(Guid subModuleId)
+        public Permission? Get(Guid id)
         {
-            return _dataContext?.Permission.Include(r => r.Roles).Include(s => s.SubModules).Where(p => p.SubModuleId == subModuleId).FirstOrDefault();
+            return _dataContext?.Permission.Include(r => r.Role).Include(s => s.SubModule).Where(p => p.Id.Equals(id)).FirstOrDefault();
         }
     }
 }

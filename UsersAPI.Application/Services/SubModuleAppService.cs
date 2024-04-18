@@ -3,6 +3,7 @@ using UsersAPI.Application.Dtos.Requests;
 using UsersAPI.Application.Dtos.Responses;
 using UsersAPI.Application.Interfaces.Application;
 using UsersAPI.Domain.Entities;
+using UsersAPI.Domain.Exceptions;
 using UsersAPI.Domain.Interfaces.Services;
 
 namespace UsersAPI.Application.Services
@@ -20,35 +21,70 @@ namespace UsersAPI.Application.Services
 
         public SubModuleResponseDto Add(SubModuleAddRequestDto dto)
         {
-            var subModule = new SubModule
+            try
             {
-                Id = Guid.NewGuid(),
-                SubModuleName = dto.SubModuleName,
-                CreatedAt = DateTime.Now
-            };
+                var subModule = new SubModule
+                {
+                    Id = Guid.NewGuid(),
+                    ModuleId = dto.ModuleId,
+                    ParentSubModuleId = dto.ParentSubModuleId,
+                    SubModuleName = dto.SubModuleName,
+                    CreatedAt = DateTime.Now
+                };
 
-            _subModuleDomainService?.Add(subModule);
-            return _mapper.Map<SubModuleResponseDto>(subModule);
+                _subModuleDomainService?.Add(subModule);
+                return _mapper.Map<SubModuleResponseDto>(subModule);
+            }
+            catch (SubModuleAlreadyExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (ModuleIsNotExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public SubModuleResponseDto Update(Guid id, SubModuleUpdateRequestDto dto)
         {
-            var subModule = _subModuleDomainService?.GetById(id);
-            subModule.SubModuleName = dto.SubModuleName;
+            try
+            {
+                var subModule = _subModuleDomainService?.GetById(id);
+                subModule.SubModuleName = dto.SubModuleName;
 
 
-            _subModuleDomainService?.Update(subModule);
+                _subModuleDomainService?.Update(subModule);
 
-            return _mapper.Map<SubModuleResponseDto>(subModule);
+                return _mapper.Map<SubModuleResponseDto>(subModule);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public SubModuleResponseDto Delete(Guid id)
         {
-            var subModule = _subModuleDomainService?.GetById(id);
+            try
+            {
+                var subModule = _subModuleDomainService?.GetById(id);
 
-            _subModuleDomainService?.Delete(subModule);
+                _subModuleDomainService?.Delete(subModule);
 
-            return _mapper.Map<SubModuleResponseDto>(subModule);
+                return _mapper.Map<SubModuleResponseDto>(subModule);
+            }
+            catch (SubModuleIsNotDeleteException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public List<SubModuleResponseDto> GetAll()
@@ -66,6 +102,12 @@ namespace UsersAPI.Application.Services
         public SubModuleResponseDto Get(Guid id)
         {
             var subModule = _subModuleDomainService?.GetById(id);
+            return _mapper.Map<SubModuleResponseDto>(subModule);
+        }
+
+        public SubModuleResponseDto GetByModuleId(Guid moduleId)
+        {
+            var subModule = _subModuleDomainService?.GetByModuleId(moduleId);
             return _mapper.Map<SubModuleResponseDto>(subModule);
         }
 

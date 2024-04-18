@@ -1,5 +1,6 @@
 ﻿using UsersAPI.Application.Dtos.Requests;
 using UsersAPI.Application.Dtos.Responses;
+using UsersAPI.Domain.Entities;
 
 namespace UsersAPI.Application.Interfaces.Application
 {
@@ -11,5 +12,9 @@ namespace UsersAPI.Application.Interfaces.Application
         List<UserResponseDto> GetAll();
         List<UserResponseDto> GetAll(Guid companyId);
         UserResponseDto Get(Guid id);
+/*
+        UserResponseDto? GetByCompanyId(Guid companyId);
+        UserResponseDto? GetByRoleId(Guid roleId);
+*/
     }
 }

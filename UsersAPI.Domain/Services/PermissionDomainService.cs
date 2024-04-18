@@ -40,13 +40,13 @@ namespace UsersAPI.Domain.Services
             return _unitOfWork?.PermissionRepository.GetAll().ToList();
         }
 
+        public Permission? Get(Guid id)
+        {
+            return _unitOfWork?.PermissionRepository.Get(p => p.Id.Equals(id));
+        }
         public Permission? Get(Guid subModuleId, Guid roleId)
         {
             return _unitOfWork?.PermissionRepository.Get(p => p.SubModuleId == subModuleId && p.RoleId == roleId);
-        }
-        public Permission? GetBySubModuleId(Guid subModuleId)
-        {
-            return _unitOfWork?.PermissionRepository.Get(p => p.SubModuleId.Equals(subModuleId));
         }
 
         public void Dispose()

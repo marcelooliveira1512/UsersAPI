@@ -6,7 +6,5 @@ namespace UsersAPI.Domain.Interfaces.Repositories
     {
         List<Permission> GetAll();
         Permission? Get(Guid subModuleId, Guid roleId);
-        Permission? GetBySubModuleId(Guid subModuleId);
-
     }
 }

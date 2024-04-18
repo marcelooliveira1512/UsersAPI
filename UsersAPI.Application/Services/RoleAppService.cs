@@ -3,8 +3,8 @@ using UsersAPI.Application.Dtos.Requests;
 using UsersAPI.Application.Dtos.Responses;
 using UsersAPI.Application.Interfaces.Application;
 using UsersAPI.Domain.Entities;
+using UsersAPI.Domain.Exceptions;
 using UsersAPI.Domain.Interfaces.Services;
-using UsersAPI.Domain.Services;
 
 namespace UsersAPI.Application.Services
 {
@@ -22,34 +22,60 @@ namespace UsersAPI.Application.Services
         public RoleResponseDto Add(RoleAddRequestDto dto)
         {
 
-            var role = new Role
+            try
             {
-                Id = Guid.NewGuid(),
-                RoleName = dto.RoleName,
-                CreatedAt = DateTime.Now
-            };
+                var role = new Role
+                {
+                    Id = Guid.NewGuid(),
+                    RoleName = dto.RoleName,
+                    CreatedAt = DateTime.Now
+                };
 
-            _roleDomainService?.Add(role);
-            return _mapper.Map<RoleResponseDto>(role);
+                _roleDomainService?.Add(role);
+                return _mapper.Map<RoleResponseDto>(role);
+            }
+            catch (RoleAlreadyExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
         public RoleResponseDto Update(Guid id, RoleUpdateRequestDto dto)
         {
-            var role = _roleDomainService?.Get(id);
-            role.RoleName = dto.RoleName;
+            try
+            {
+                var role = _roleDomainService?.Get(id);
+
+                role.RoleName = dto.RoleName;
 
 
-            _roleDomainService?.Update(role);
+                _roleDomainService?.Update(role);
 
-            return _mapper.Map<RoleResponseDto>(role);
+                return _mapper.Map<RoleResponseDto>(role);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public RoleResponseDto Delete(Guid id)
         {
-            var role = _roleDomainService?.Get(id);
+            try
+            {
+                var role = _roleDomainService?.Get(id);
 
-            _roleDomainService?.Delete(role);
+                _roleDomainService?.Delete(role);
 
-            return _mapper.Map<RoleResponseDto>(role);
+                return _mapper.Map<RoleResponseDto>(role);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public List<RoleResponseDto> GetAll()

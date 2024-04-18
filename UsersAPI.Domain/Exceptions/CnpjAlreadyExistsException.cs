@@ -2,8 +2,8 @@
 {
     public class CnpjAlreadyExistsException : Exception
     {
-        public CnpjAlreadyExistsException(string cnpj, string companyName)
-            : base($"O Cnpj '{cnpj}' está cadastrado para a empresa '{companyName}'. Informe outro Cnpj.")
+        public CnpjAlreadyExistsException(string cnpj)
+            : base($"O Cnpj '{cnpj}' já está cadastrado. Informe outro Cnpj.")
         {
 
         }

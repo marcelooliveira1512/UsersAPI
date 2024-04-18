@@ -20,7 +20,8 @@ namespace UsersAPI.Infra.Data.Mappings
 
             //mapeamento do relacionamento (N para N)
             builder.HasMany(r => r.Permissions) // N Permissions tem N Roles
-                .WithMany(r => r.Roles); // N Roles tem N Permissions
+                .WithOne(r => r.Role)
+                .HasForeignKey(r => r.RoleId); // N Roles tem N Permissions
 
         }
     }

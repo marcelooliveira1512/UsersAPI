@@ -3,8 +3,8 @@ using UsersAPI.Application.Dtos.Requests;
 using UsersAPI.Application.Dtos.Responses;
 using UsersAPI.Application.Interfaces.Application;
 using UsersAPI.Domain.Entities;
+using UsersAPI.Domain.Exceptions;
 using UsersAPI.Domain.Interfaces.Services;
-using UsersAPI.Domain.Services;
 
 namespace UsersAPI.Application.Services
 {
@@ -21,35 +21,61 @@ namespace UsersAPI.Application.Services
 
         public ModuleResponseDto Add(ModuleAddRequestDto dto)
         {
-            var module = new Module
+            try
             {
-                Id = Guid.NewGuid(),
-                ModuleName = dto.ModuleName,
-                CreatedAt = DateTime.Now
-            };
+                var module = new Module
+                {
+                    Id = Guid.NewGuid(),
+                    ModuleName = dto.ModuleName,
+                    CreatedAt = DateTime.Now
+                };
 
-            _moduleDomainService?.Add(module);
-            return _mapper.Map<ModuleResponseDto>(module);
+                _moduleDomainService?.Add(module);
+                return _mapper.Map<ModuleResponseDto>(module);
+            }
+            catch (ModuleAlreadyExistsException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
+
         }
 
         public ModuleResponseDto Update(Guid id, ModuleUpdateRequestDto dto)
         {
-            var module = _moduleDomainService?.Get(id);
-            module.ModuleName = dto.ModuleName;
+            try
+            {
+                var module = _moduleDomainService?.Get(id);
+                
+                module.ModuleName = dto.ModuleName;
 
+                _moduleDomainService?.Update(module);
 
-            _moduleDomainService?.Update(module);
-
-            return _mapper.Map<ModuleResponseDto>(module);
+                return _mapper.Map<ModuleResponseDto>(module);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public ModuleResponseDto Delete(Guid id)
         {
-            var module = _moduleDomainService?.Get(id);
+            try
+            {
+                var module = _moduleDomainService?.Get(id);
 
-            _moduleDomainService?.Delete(module);
+                _moduleDomainService?.Delete(module);
 
-            return _mapper.Map<ModuleResponseDto>(module);
+                return _mapper.Map<ModuleResponseDto>(module);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
         }
 
         public List<ModuleResponseDto> GetAll()

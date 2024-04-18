@@ -1,11 +1,13 @@
-﻿namespace UsersAPI.Domain.Entities
+﻿using System.ComponentModel;
+
+namespace UsersAPI.Domain.Entities
 {
     public class SubModule
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; }        
         public Guid ModuleId { get; set; }
         public Guid ParentSubModuleId { get; set; }
-        public string? SubModuleName { get; set; }
+        public string? SubModuleName { get; set; }        
         public DateTime? CreatedAt { get; set; }
 
 

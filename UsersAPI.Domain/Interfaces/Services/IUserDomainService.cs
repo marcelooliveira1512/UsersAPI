@@ -12,5 +12,8 @@ namespace UsersAPI.Domain.Interfaces.Services
         User? Get(Guid id);
         User? Get(string email);
         User? Get(string email, string password);
+        User? GetByCompanyId(Guid companyId);
+        User? GetByRoleId(Guid roleId);
+
     }
 }

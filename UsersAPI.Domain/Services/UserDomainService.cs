@@ -1,4 +1,5 @@
-﻿using UsersAPI.Domain.Entities;
+﻿using System.ComponentModel.Design;
+using UsersAPI.Domain.Entities;
 using UsersAPI.Domain.Exceptions;
 using UsersAPI.Domain.Interfaces.Repositories;
 using UsersAPI.Domain.Interfaces.Services;
@@ -19,12 +20,24 @@ namespace UsersAPI.Domain.Services
             if (Get(user.Email) != null)
                 throw new EmailAlreadyExistsException(user.Email);
 
+            if (GetByCompanyId(user.CompanyId) != null)
+                throw new CompanyIsNotExistsException(user.CompanyId);
+
+            if (GetByRoleId(user.RoleId) != null)
+                throw new RoleIsNotExistsException(user.RoleId);
+
             _unitOfWork?.UserRepository.Add(user);
             _unitOfWork?.SaveChanges();
         }
 
         public void Update(User user)
         {
+            if (GetByCompanyId(user.CompanyId) != null)
+                throw new CompanyIsNotExistsException(user.CompanyId);
+
+            if (GetByRoleId(user.RoleId) != null)
+                throw new RoleIsNotExistsException(user.RoleId);
+
             _unitOfWork?.UserRepository.Update(user);
             _unitOfWork?.SaveChanges();
         }
@@ -58,6 +71,16 @@ namespace UsersAPI.Domain.Services
         public User? Get(string email, string password)
         {
             return _unitOfWork?.UserRepository.Get(u => u.Email.Equals(email) && u.Password.Equals(password));
+        }
+
+        public User? GetByCompanyId(Guid companyId)
+        {
+            return _unitOfWork?.UserRepository.Get(u => u.CompanyId.Equals(companyId));
+        }
+
+        public User? GetByRoleId(Guid roleId)
+        {
+            return _unitOfWork?.UserRepository.Get(u => u.RoleId.Equals(roleId));
         }
 
         public void Dispose()

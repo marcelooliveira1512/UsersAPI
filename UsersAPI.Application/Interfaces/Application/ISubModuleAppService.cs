@@ -11,5 +11,6 @@ namespace UsersAPI.Application.Interfaces.Application
         List<SubModuleResponseDto> GetAll();
         List<SubModuleResponseDto> GetAll(Guid moduleId);
         SubModuleResponseDto Get(Guid id);
+        SubModuleResponseDto GetByModuleId(Guid moduleId);
     }
 }

@@ -22,7 +22,8 @@ namespace UsersAPI.Infra.Data.Mappings
 
             //mapeamento do relacionamento (N para N)
             builder.HasMany(s => s.Permissions) // N Permissions tem N SubModules
-                .WithMany(s => s.SubModules); // N SubModules tem N Permissions
+                .WithOne(s => s.SubModule)
+                .HasForeignKey(s => s.SubModuleId); // N SubModules tem N Permissions
 
         }
     }

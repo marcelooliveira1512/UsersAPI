@@ -5,10 +5,10 @@ namespace UsersAPI.Application.Dtos.Requests
     public class UserUpdateRequestDto
     {
         [Required(ErrorMessage = "Informe uma Empresa.")]
-        public Guid? CompanyId { get; set; }
+        public Guid CompanyId { get; set; }
 
         [Required(ErrorMessage = "Informe um Perfil.")]
-        public Guid? RoleId { get; set; }
+        public Guid RoleId { get; set; }
 
         [Required(ErrorMessage = "Informe o Nome.")]
         [MinLength(2, ErrorMessage = "Informe o Nome com pelo menos {1} caracteres.")]

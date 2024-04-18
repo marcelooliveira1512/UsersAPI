@@ -15,11 +15,11 @@ namespace UsersAPI.Application.Mappings
             CreateMap<Role, RoleResponseDto>();
 
             CreateMap<Permission, PermissionResponseDto>()
-                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Roles))
-                .ForMember(dest => dest.SubModuleId, opt => opt.MapFrom(src => src.SubModules));
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName))
+                .ForMember(dest => dest.SubModuleName, opt => opt.MapFrom(src => src.SubModule.SubModuleName));
 
             CreateMap<SubModule, SubModuleResponseDto>()
-                .ForMember(dest => dest.ModuleId, opt => opt.MapFrom(src => src.Module));
+                .ForMember(dest => dest.ModuleName, opt => opt.MapFrom(src => src.Module.ModuleName));
 
             CreateMap<User, UserResponseDto>()            
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName))

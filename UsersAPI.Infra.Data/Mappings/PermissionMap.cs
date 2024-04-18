@@ -8,19 +8,24 @@ namespace UsersAPI.Infra.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Permission> builder)
         {
-            builder.HasKey(p => new { p.RoleId, p.SubModuleId});
+            builder.HasKey(p => p.Id);
 
+            builder.Property(p => p.RoleId).IsRequired();
+            builder.Property(p => p.SubModuleId).IsRequired();
             builder.Property(p => p.Create).HasColumnType("bit");
             builder.Property(p => p.Update).HasColumnType("bit");
             builder.Property(p => p.Delete).HasColumnType("bit");
             builder.Property(p => p.Read).HasColumnType("bit");
 
             //mapeamento do relacionamento (N para N)
-            builder.HasMany(p => p.SubModules) // N SubModules tem N Permissions
-                .WithMany(p => p.Permissions); // N Permissions tem N SubModules
+            builder.HasOne(p => p.SubModule) // N SubModules tem 1 Permission
+                .WithMany(p => p.Permissions)
+                .HasForeignKey(p => p.SubModuleId); // N Permissions tem N SubModules
 
-            builder.HasMany(p => p.Roles) // N Roles tem N Permissions
-                .WithMany(p => p.Permissions); // N Permissions tem N Roles
+
+            builder.HasOne(p => p.Role) // N Roles tem N Permissions
+                .WithMany(p => p.Permissions)
+                .HasForeignKey(p => p.RoleId); // N Permissions tem N Roles
 
         }
     }
