@@ -24,7 +24,7 @@ namespace UsersAPI.Infra.Data.Repositories
             return _dataContext?.Permission.Where(p => p.SubModuleId == subModuleId && p.RoleId == roleId).FirstOrDefault();
         }
 
-        public Permission? Get(Guid id)
+        public Permission? GetById(Guid id)
         {
             return _dataContext?.Permission.Include(r => r.Role).Include(s => s.SubModule).Where(p => p.Id.Equals(id)).FirstOrDefault();
         }

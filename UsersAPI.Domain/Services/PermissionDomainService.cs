@@ -42,7 +42,7 @@ namespace UsersAPI.Domain.Services
 
         public Permission? Get(Guid id)
         {
-            return _unitOfWork?.PermissionRepository.Get(p => p.Id.Equals(id));
+            return _unitOfWork?.PermissionRepository.GetById(id);
         }
         public Permission? Get(Guid subModuleId, Guid roleId)
         {

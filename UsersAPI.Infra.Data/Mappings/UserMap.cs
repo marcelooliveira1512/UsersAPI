@@ -25,13 +25,13 @@ namespace UsersAPI.Infra.Data.Mappings
             
             //mapeamento do relacionamento (1 para 1)
             builder.HasOne(u => u.Role) //1 User TEM 1 Role
-                .WithOne(u => u.User) //1 Role TEM 1 User
-                .HasForeignKey<User>(u => u.RoleId); //definindo o campo CHAVE ESTRANGEIRA
+                .WithMany(r => r.Users) //1 Role TEM 1 User
+                .HasForeignKey(u => u.RoleId); //definindo o campo CHAVE ESTRANGEIRA
 
             //mapeamento do relacionamento (1 para 1)
             builder.HasOne(u => u.Company) //1 User TEM 1 Company
-                .WithOne(u => u.User) //1 Company TEM 1 User
-                .HasForeignKey<User>(u => u.CompanyId); //definindo o campo CHAVE ESTRANGEIRA
+                .WithMany(c => c.User) //1 Company TEM 1 User
+                .HasForeignKey(u => u.CompanyId); //definindo o campo CHAVE ESTRANGEIRA
         }
     }
 }

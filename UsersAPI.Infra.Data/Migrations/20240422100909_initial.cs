@@ -177,8 +177,7 @@ namespace UsersAPI.Infra.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_User_CompanyId",
                 table: "User",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Email",
@@ -189,8 +188,7 @@ namespace UsersAPI.Infra.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_User_RoleId",
                 table: "User",
-                column: "RoleId",
-                unique: true);
+                column: "RoleId");
         }
 
         /// <inheritdoc />

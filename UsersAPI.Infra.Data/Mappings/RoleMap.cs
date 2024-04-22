@@ -13,15 +13,15 @@ namespace UsersAPI.Infra.Data.Mappings
             builder.Property(r => r.RoleName).HasMaxLength(50).IsRequired();
             builder.Property(r => r.CreatedAt).IsRequired();
 
-            //mapeamento do relacionamento (1 para 1)
-            builder.HasOne(r => r.User) //1 Role TEM 1 User
+            //mapeamento do relacionamento (1 para N)
+            builder.HasMany(r => r.Users) //1 Role TEM N User
                 .WithOne(r => r.Role) // 1 User TEM 1 Role
-                .HasForeignKey<User>(r => r.RoleId); //definindo o campo CHAVE ESTRANGEIRA
+                .HasForeignKey(r => r.RoleId); //definindo o campo CHAVE ESTRANGEIRA
 
-            //mapeamento do relacionamento (N para N)
-            builder.HasMany(r => r.Permissions) // N Permissions tem N Roles
-                .WithOne(r => r.Role)
-                .HasForeignKey(r => r.RoleId); // N Roles tem N Permissions
+            //mapeamento do relacionamento (1 para N)
+            builder.HasMany(r => r.Permissions) // 1 Role tem N Permissions 
+                .WithOne(r => r.Role) // 1 Permission tem 1 Role
+                .HasForeignKey(r => r.RoleId); // definindo o campo CHAVE ESTRANGEIRA
 
         }
     }

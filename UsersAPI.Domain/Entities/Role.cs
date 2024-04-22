@@ -11,6 +11,6 @@
         /// Relacionamentos entre Entidades
         /// </summary>
         public List<Permission>? Permissions { get; set; }
-        public User? User { get; set; }
+        public List<User>? Users { get; set; }
     }
 }

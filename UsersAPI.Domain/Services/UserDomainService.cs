@@ -20,10 +20,10 @@ namespace UsersAPI.Domain.Services
             if (Get(user.Email) != null)
                 throw new EmailAlreadyExistsException(user.Email);
 
-            if (GetByCompanyId(user.CompanyId) != null)
+            if (_unitOfWork.CompanyRepository.GetById(user.CompanyId) == null)
                 throw new CompanyIsNotExistsException(user.CompanyId);
 
-            if (GetByRoleId(user.RoleId) != null)
+            if (_unitOfWork.RoleRepository.GetById(user.RoleId) == null)
                 throw new RoleIsNotExistsException(user.RoleId);
 
             _unitOfWork?.UserRepository.Add(user);

@@ -12,7 +12,7 @@ using UsersAPI.Infra.Data.Contexts;
 namespace UsersAPI.Infra.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240413123221_initial")]
+    [Migration("20240422100909_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -287,14 +287,12 @@ namespace UsersAPI.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -332,14 +330,14 @@ namespace UsersAPI.Infra.Data.Migrations
             modelBuilder.Entity("UsersAPI.Domain.Entities.User", b =>
                 {
                     b.HasOne("UsersAPI.Domain.Entities.Company", "Company")
-                        .WithOne("User")
-                        .HasForeignKey("UsersAPI.Domain.Entities.User", "CompanyId")
+                        .WithMany("User")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UsersAPI.Domain.Entities.Role", "Role")
-                        .WithOne("User")
-                        .HasForeignKey("UsersAPI.Domain.Entities.User", "RoleId")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -362,7 +360,7 @@ namespace UsersAPI.Infra.Data.Migrations
                 {
                     b.Navigation("Permissions");
 
-                    b.Navigation("User");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("UsersAPI.Domain.Entities.SubModule", b =>

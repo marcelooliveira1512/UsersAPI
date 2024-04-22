@@ -31,6 +31,6 @@ namespace UsersAPI.Domain.Entities
         /// <summary>
         /// Relacionamento entre Entidades
         /// </summary>
-        public User? User { get; set; }
+        public List<User>? User { get; set; }
     }
 }

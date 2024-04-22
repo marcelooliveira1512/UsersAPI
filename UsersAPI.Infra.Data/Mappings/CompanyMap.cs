@@ -36,9 +36,9 @@ namespace UsersAPI.Infra.Data.Mappings
             builder.HasIndex(c => c.Cnpj).IsUnique();
 
             //mapeamento do relacionamento (1 para 1)
-            builder.HasOne(c => c.User) //1 User TEM 1 Company
-                .WithOne(c => c.Company) //1 Company TEM 1 User
-                .HasForeignKey<User>(c => c.CompanyId); //definindo o campo CHAVE ESTRANGEIRA
+            builder.HasMany(c => c.User) //1 User TEM 1 Company
+                .WithOne(u => u.Company) //1 Company TEM 1 User
+                .HasForeignKey(u => u.CompanyId); //definindo o campo CHAVE ESTRANGEIRA
 
         }
     }
