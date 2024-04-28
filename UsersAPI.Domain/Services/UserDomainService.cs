@@ -1,18 +1,22 @@
 ﻿using System.ComponentModel.Design;
 using UsersAPI.Domain.Entities;
 using UsersAPI.Domain.Exceptions;
+using UsersAPI.Domain.Interfaces.Messages;
 using UsersAPI.Domain.Interfaces.Repositories;
 using UsersAPI.Domain.Interfaces.Services;
+using UsersAPI.Domain.ValueObjects;
 
 namespace UsersAPI.Domain.Services
 {
     public class UserDomainService : IUserDomainService
     {
         private readonly IUnitOfWork? _unitOfWork;
+        private readonly IUserMessageProducer? userMessageProducer;
 
-        public UserDomainService(IUnitOfWork? unitOfWork)
+        public UserDomainService(IUnitOfWork? unitOfWork, IUserMessageProducer? userMessageProducer)
         {
             _unitOfWork = unitOfWork;
+            this.userMessageProducer = userMessageProducer;
         }
 
         public void Add(User user)
@@ -28,6 +32,15 @@ namespace UsersAPI.Domain.Services
 
             _unitOfWork?.UserRepository.Add(user);
             _unitOfWork?.SaveChanges();
+
+            userMessageProducer?.Send(new UserMessageVO
+            {
+                Id = user.Id,
+                SendedAt = DateTime.Now,
+                To = user.Email,
+                Subject = "Parabéns, sua conta de usuário foi criado com sucesso",
+                Body = @$"Olá {user.FirstName}, clique no link abaixo para ativar seu Usuário em nosso sistema.<br><a href='http://ativarcadastro.com?{user.Id}'>Clique aqui para ativar seu usuário</a>"
+            });
         }
 
         public void Update(User user)

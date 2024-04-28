@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UsersAPI.Application.Dtos.Requests;
 using UsersAPI.Application.Dtos.Responses;
 using UsersAPI.Application.Interfaces.Application;
+using UsersAPI.Domain.Exceptions;
 using UsersAPI.Domain.Interfaces.Services;
 
 namespace UsersAPI.Application.Services
@@ -49,6 +50,23 @@ namespace UsersAPI.Application.Services
             return _mapper.Map<UserResponseDto>(user);
         }
 
+        public UserResponseDto ActivateUser(Guid id, ActivateUserRequestDto dto)
+        {
+            try
+            {
+                var user = _userDomainService?.Get(id);
+                user.Active = true;
+                user.EmailConfirmed = true;
+
+                _userDomainService?.Update(user);
+
+                return _mapper.Map<UserResponseDto>(user);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error: {e.Message}, reporte ao Administrador do sistema o erro informado.");
+            }
+        }
         public void Dispose()
         {
             _userDomainService?.Dispose();

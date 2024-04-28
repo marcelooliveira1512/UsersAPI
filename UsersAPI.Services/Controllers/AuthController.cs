@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UsersAPI.Application.Dtos.Requests;
+using UsersAPI.Application.Interfaces.Application;
 
 namespace UsersAPI.Services.Controllers
 {
@@ -8,6 +10,13 @@ namespace UsersAPI.Services.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly IAuthAppService? _authAppService;
+
+        public AuthController(IAuthAppService? authAppService)
+        {
+            _authAppService = authAppService;
+        }
+
         /// <summary>
         /// Autenticar o usuário
         /// </summary>
@@ -31,12 +40,25 @@ namespace UsersAPI.Services.Controllers
         /// <summary>
         /// Reiniciar senha de acesso do usuário
         /// </summary>
-        [Authorize]
+        //[Authorize]
         [Route("reset-password")]
         [HttpPost]
         public IActionResult ResetPassword()
         {
             return Ok();
+        }
+
+        /// <summary>
+        /// Ativar usuário para acessar o sistema
+        /// </summary>
+        //[Authorize]
+        [Route("activate-user")]
+        [HttpPost]
+        //[HttpPut("{id}")]
+        public IActionResult ActivateUser(Guid id, ActivateUserRequestDto dto)
+        {
+            return Ok();
+            //return StatusCode(200, _authAppService?.ActivateUser(id, dto));
         }
     }
 }
