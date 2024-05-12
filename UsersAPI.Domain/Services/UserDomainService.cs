@@ -35,11 +35,9 @@ namespace UsersAPI.Domain.Services
 
             userMessageProducer?.Send(new UserMessageVO
             {
-                Id = user.Id,
-                SendedAt = DateTime.Now,
-                To = user.Email,
+                Email = user.Email,
                 Subject = "Parabéns, sua conta de usuário foi criado com sucesso",
-                Body = @$"Olá {user.FirstName}, clique no link abaixo para ativar seu Usuário em nosso sistema.<br><a href='http://ativarcadastro.com?{user.Id}'>Clique aqui para ativar seu usuário</a>"
+                Body = @$"Olá {user.FirstName}, clique no link para ativar seu Usuário em nosso sistema."
             });
         }
 

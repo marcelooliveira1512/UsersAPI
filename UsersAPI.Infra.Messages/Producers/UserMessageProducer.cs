@@ -30,7 +30,7 @@ namespace UsersAPI.Infra.Messages.Producers
                     model.QueueDeclare(
                         queue: _rabbitmqSettings.Queue, //nome da fila
                         durable: true, //não apagar as filas ao desligar ou reiniciar o broker
-                        autoDelete: true, //apagar ou não a fila quando estiver vazia
+                        autoDelete: false, //apagar ou não a fila quando estiver vazia
                         exclusive: false, //fila exclusiva ou não para uma única aplicação
                         arguments: null
                         );

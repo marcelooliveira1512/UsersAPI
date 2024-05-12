@@ -1,6 +1,6 @@
-﻿namespace UsersAPI.Domain.ValueObjects
+﻿    namespace UsersAPI.Infra.Messages.Models
 {
-    public class UserMessageVO
+    public class MessagesRequestModel
     {
         public string? Email { get; set; }
         public string? Subject { get; set; }
